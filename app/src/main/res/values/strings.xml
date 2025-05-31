@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">JovinJuanlieApp</string>
-    <string name ="login">Login</string>
-    <string name = "username">Username</string>
-    <string name = "email">Email</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="place_username">Masukan nama anda</string>
     <string name="place_email">Masukan alamat email anda</string>
