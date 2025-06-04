@@ -18,6 +18,13 @@ public class ProfilActivity extends AppCompatActivity {
     TextView txvHasil;
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -33,6 +40,8 @@ public class ProfilActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.edtEmail);
         edtProdi = findViewById(R.id.edtProdi);
         txvHasil = findViewById(R.id.txvHasil);
+
+        edtNama.setText(getIntent().getStringExtra("nama"));
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
