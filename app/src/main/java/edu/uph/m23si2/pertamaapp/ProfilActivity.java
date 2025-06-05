@@ -41,6 +41,8 @@ public class ProfilActivity extends AppCompatActivity {
         edtProdi = findViewById(R.id.edtProdi);
         txvHasil = findViewById(R.id.txvHasil);
 
+        edtNama.setError("Wajib isi");
+
         edtNama.setText(getIntent().getStringExtra("nama"));
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {

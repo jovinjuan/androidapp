@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class DashboardActivity extends AppCompatActivity {
-    LinearLayout llyProfil;
+    LinearLayout llyProfil,llyTodolist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +25,17 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         llyProfil= findViewById(R.id.llyProfil);
+        llyTodolist=findViewById(R.id.llyTodolist);
         llyProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toProfil();
+            }
+        });
+        llyTodolist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toTodolist();
             }
         });
     }
@@ -37,4 +44,10 @@ public class DashboardActivity extends AppCompatActivity {
         intent.putExtra("nama","Satria");
         startActivity(intent);
     }
+
+    public void toTodolist(){
+        Intent intent = new Intent(this,TodoListActivity.class);
+        startActivity(intent);
+    }
+
 }
