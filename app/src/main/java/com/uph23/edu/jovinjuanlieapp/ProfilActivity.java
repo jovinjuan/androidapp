@@ -54,11 +54,16 @@ public class ProfilActivity extends AppCompatActivity {
                 txvHasil.setText(nama + "\n" + prodi + "\n" + fakultas);
                 edtNama.setText("");
                 edtProdi.setText("");
+
             }
         });
         edtNama = findViewById(R.id.edtNama);
         edtProdi = findViewById(R.id.edtProdi);
         btnSubmit = findViewById(R.id.btnSubmit);
         txvHasil = findViewById(R.id.txvHasil);
+
+        edtNama.setText(getIntent().getStringExtra("name").toString());
+        edtProdi.setText(getIntent().getStringExtra("prodi").toString());
+
     }
 }
