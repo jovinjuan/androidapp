@@ -3,4 +3,12 @@
     <string name="name">Nama</string>
     <string name="navigation_drawer_open">-</string>
     <string name="navigation_drawer_close">+</string>
+    <string-array name="prodi_array">
+        <item>Sistem Informasi</item>
+        <item>Informatika</item>
+        <item>Hukum</item>
+        <item>Manajemen</item>
+        <item>Akuntansi</item>
+        <item>Manajemen Perhotelan</item>
+    </string-array>
 </resources>

@@ -1,9 +1,17 @@
 package edu.uph.m23si2.pertamaapp;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -14,15 +22,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class ProfilActivity extends AppCompatActivity {
     Button btnSubmit;
-    EditText edtNama, edtEmail, edtProdi;
+    EditText edtNama, edtEmail;
     TextView txvHasil;
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-
-    }
+    Spinner sprProdi;
+    RadioButton rdbPria, rdbWanita;
+    RadioGroup rdgJenisKelamin;
+    CheckBox ckbMakan,ckbTidur, ckbBelajar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +39,68 @@ public class ProfilActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        init();
+        edtNama.setText(getIntent().getStringExtra("nama"));
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                simpan();
+            }
+        });
+    }
+    public void init(){
         btnSubmit = findViewById(R.id.btnSubmit);
         edtNama = findViewById(R.id.edtNama);
         edtEmail = findViewById(R.id.edtEmail);
-        edtProdi = findViewById(R.id.edtProdi);
         txvHasil = findViewById(R.id.txvHasil);
+        sprProdi = findViewById(R.id.sprProdi);
+        rdgJenisKelamin = findViewById(R.id.rdgJenisKelamin);
+        rdbPria = findViewById(R.id.rdbPria);
+        rdbWanita = findViewById(R.id.rdbWanita);
+        ckbTidur = findViewById(R.id.ckbTidur);
+        ckbMakan = findViewById(R.id.ckbMakan);
+        ckbBelajar = findViewById(R.id.ckbBelajar);
 
-        edtNama.setError("Wajib isi");
+        // Create an ArrayAdapter using the string array and a default spinner layout.
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.prodi_array,
+                android.R.layout.simple_spinner_item
+        );
+        // Specify the layout to use when the list of choices appears.
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner.
+        sprProdi.setAdapter(adapter);
+    }
+    public boolean isValidated(){
+        if(edtNama.getText().toString().equals("")){
+            edtNama.setError("Nama wajib di isi");
+            return false;
+        }else if(edtEmail.getText().toString().equals("")) {
+            edtEmail.setError("Email wajib di isi");
+            return false;
+        }
+        return true;
+    }
+    public void simpan(){
+        if(isValidated()){
+            // Menampilkan hasil di txvHasil
+            String nama = edtNama.getText().toString();
+            String email = edtEmail.getText().toString();
+            String prodi = sprProdi.getSelectedItem().toString();
+            String jenisKelamin = "";
+            String hobi="";
+            if(rdbWanita.isChecked()) jenisKelamin= rdbWanita.getText().toString();
+            else if(rdbPria.isChecked()) jenisKelamin= rdbPria.getText().toString();
 
-        edtNama.setText(getIntent().getStringExtra("nama"));
+            if(ckbBelajar.isChecked()) hobi += ckbBelajar.getText().toString()+"; ";
+            if(ckbMakan.isChecked()) hobi += ckbMakan.getText().toString()+"; ";
+            if(ckbTidur.isChecked()) hobi += ckbTidur.getText().toString()+"; ";
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Menampilkan hasil di txvHasil
-                String nama = edtNama.getText().toString();
-                String email = edtEmail.getText().toString();
-                String prodi = edtProdi.getText().toString();
-                txvHasil.setText(nama + "\n"+ email + "\nProgram Studi" + prodi + "\n" +
-                        getNamaFakultas(prodi));
-            }
-        });
+            txvHasil.setText(nama + "("+jenisKelamin+")"+
+                    "\nHobi "+hobi
+                    + "\n"+ email + "\nProgram Studi " + prodi + "\n" +
+                    getNamaFakultas(prodi));
+        }
     }
 
     String getNamaFakultas(String prodi){
@@ -71,5 +117,23 @@ public class ProfilActivity extends AppCompatActivity {
         }
         else
             return "Fakultas Tidak di Temukan";
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_profil, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection.
+        if(item.getItemId()==R.id.mSimpan){
+            simpan();
+            return true;
+        }
+        else{
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
