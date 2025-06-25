@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -19,8 +20,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import edu.uph.m23si2.pertamaapp.model.Mahasiswa;
+import io.realm.Realm;
+
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout llyProfil,llyTodolist;
+    TextView txvMahasiswa,txvNama,txvProdi;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
@@ -35,6 +40,16 @@ public class DashboardActivity extends AppCompatActivity {
             return insets;
         });
 
+        txvMahasiswa = findViewById(R.id.txvMahasiswa);
+        txvNama = findViewById(R.id.txvNama);
+        txvProdi= findViewById(R.id.txvProdi);
+        Realm realm = Realm.getDefaultInstance();
+        Mahasiswa mhs = realm.where(Mahasiswa.class).findFirst();
+        if (mhs != null) {
+            txvNama.setText(mhs.getNama());
+            txvProdi.setText(mhs.getEmail()+"\nProgram Studi "+mhs.getProdi());
+            txvMahasiswa.setText(mhs.toString());
+        }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         drawerLayout = findViewById(R.id.drawer_layout);

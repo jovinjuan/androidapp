@@ -12,6 +12,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     EditText edtNama, edtPassword;
@@ -27,6 +30,14 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("default.realm")
+                .schemaVersion(1)
+                .allowWritesOnUiThread(true) // sementara aktifkan untuk demo
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
 
         btnLogin = findViewById(R.id.btnLogin);
         edtNama = findViewById(R.id.edtNama);

@@ -131,6 +131,47 @@
 
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llyMahasiswa"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:orientation="horizontal"
+                android:background="#D6B798"
+                android:layout_marginBottom="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/txvNama"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Todo List"
+                        android:textSize="12pt">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/txvProdi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tulis jadwal rencana kegiatan anda............">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/user2">
+
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/txvMahasiswa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

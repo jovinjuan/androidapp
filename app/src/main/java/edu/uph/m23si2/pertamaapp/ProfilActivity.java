@@ -13,12 +13,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import edu.uph.m23si2.pertamaapp.model.Mahasiswa;
+import io.realm.Realm;
 
 public class ProfilActivity extends AppCompatActivity {
     Button btnSubmit;
@@ -91,15 +95,30 @@ public class ProfilActivity extends AppCompatActivity {
             String hobi="";
             if(rdbWanita.isChecked()) jenisKelamin= rdbWanita.getText().toString();
             else if(rdbPria.isChecked()) jenisKelamin= rdbPria.getText().toString();
+            String jk=jenisKelamin;
 
             if(ckbBelajar.isChecked()) hobi += ckbBelajar.getText().toString()+"; ";
             if(ckbMakan.isChecked()) hobi += ckbMakan.getText().toString()+"; ";
             if(ckbTidur.isChecked()) hobi += ckbTidur.getText().toString()+"; ";
-
+            String hobby = hobi;
             txvHasil.setText(nama + "("+jenisKelamin+")"+
                     "\nHobi "+hobi
                     + "\n"+ email + "\nProgram Studi " + prodi + "\n" +
                     getNamaFakultas(prodi));
+
+            //simpan ke realm
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(r -> {
+                Number maxId = r.where(Mahasiswa.class).max("studentID");
+                int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
+                Mahasiswa mhs = r.createObject(Mahasiswa.class, nextId);
+                mhs.setNama(nama);
+                mhs.setEmail(email);
+                mhs.setProdi(prodi);
+                mhs.setJenisKelamin(jk);
+                mhs.setHobi(hobby);
+            });
+            Toast.makeText(this, "Data tersimpan", Toast.LENGTH_SHORT).show();
         }
     }
 

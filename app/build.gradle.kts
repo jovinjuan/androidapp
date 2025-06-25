@@ -1,8 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
 }
+apply(plugin = "realm-android")
 
 android {
     namespace = "edu.uph.m23si2.pertamaapp"
@@ -10,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "edu.uph.m23si2.pertamaapp"
-        minSdk = 28
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -31,16 +30,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-
+    implementation("io.realm:realm-android-library:10.15.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
