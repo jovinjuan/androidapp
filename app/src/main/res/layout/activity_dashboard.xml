@@ -150,14 +150,14 @@
                         android:id="@+id/txvNama"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Todo List"
+                        android:text="List Mahasiswa"
                         android:textSize="12pt">
                     </TextView>
                     <TextView
                         android:id="@+id/txvProdi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tulis jadwal rencana kegiatan anda............">
+                        android:text="tampilkan data mahasiswa........................">
                     </TextView>
                 </LinearLayout>
                 <LinearLayout

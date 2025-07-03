@@ -24,7 +24,7 @@ import edu.uph.m23si2.pertamaapp.model.Mahasiswa;
 import io.realm.Realm;
 
 public class DashboardActivity extends AppCompatActivity {
-    LinearLayout llyProfil,llyTodolist;
+    LinearLayout llyProfil,llyTodolist,llyMahasiswa;
     TextView txvMahasiswa,txvNama,txvProdi;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -66,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         llyProfil= findViewById(R.id.llyProfil);
         llyTodolist=findViewById(R.id.llyTodolist);
+        llyMahasiswa=findViewById(R.id.llyMahasiswa);
         llyProfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,10 +79,21 @@ public class DashboardActivity extends AppCompatActivity {
                 toTodolist();
             }
         });
+        llyMahasiswa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toListMahasiswa();
+            }
+        });
+
+    }
+    public void toListMahasiswa(){
+        Intent intent = new Intent(this,ListMahasiswaActivity.class);
+        startActivity(intent);
     }
     public void toProfil(){
         Intent intent = new Intent(this,ProfilActivity.class);
-        intent.putExtra("nama","Satria");
+        intent.putExtra("mode","create");
         startActivity(intent);
     }
 

@@ -1,5 +1,6 @@
 package edu.uph.m23si2.pertamaapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,14 +26,16 @@ import edu.uph.m23si2.pertamaapp.model.Mahasiswa;
 import io.realm.Realm;
 
 public class ProfilActivity extends AppCompatActivity {
-    Button btnSubmit;
+    Button btnSubmit,btnBersihkan;
     EditText edtNama, edtEmail;
     TextView txvHasil;
     Spinner sprProdi;
     RadioButton rdbPria, rdbWanita;
     RadioGroup rdgJenisKelamin;
     CheckBox ckbMakan,ckbTidur, ckbBelajar;
-
+    String mode;
+    int studentID;
+    Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +47,31 @@ public class ProfilActivity extends AppCompatActivity {
             return insets;
         });
         init();
-        edtNama.setText(getIntent().getStringExtra("nama"));
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 simpan();
             }
         });
+        btnBersihkan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode.equals("edit")){ deleteData();}
+            }
+        });
+    }
+    public  void deleteData(){
+        realm.executeTransaction(r-> {
+            Mahasiswa mhs = r.where(Mahasiswa.class)
+                    .equalTo("studentID",studentID).findFirst();
+            if(mhs!=null){
+                mhs.deleteFromRealm();
+            }
+        });
+        toListMahasiswa();
     }
     public void init(){
         btnSubmit = findViewById(R.id.btnSubmit);
+        btnBersihkan = findViewById(R.id.btnBersihkan);
         edtNama = findViewById(R.id.edtNama);
         edtEmail = findViewById(R.id.edtEmail);
         txvHasil = findViewById(R.id.txvHasil);
@@ -74,6 +93,34 @@ public class ProfilActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner.
         sprProdi.setAdapter(adapter);
+        realm = Realm.getDefaultInstance();
+        mode = getIntent().getStringExtra("mode");
+        if(mode.equals("create")){
+            btnSubmit.setText("Simpan Data");
+            btnBersihkan.setText("Bersihkan Data");
+        } else if (mode.equals("edit")) {
+            btnSubmit.setText("Ubah Data");
+            btnBersihkan.setText("Hapus Data");
+            studentID = getIntent().getIntExtra("studentID",0);
+
+            Mahasiswa mhs = realm.where(Mahasiswa.class)
+                            .equalTo("studentID",studentID).findFirst();
+            if (mhs != null) {
+                edtNama.setText(mhs.getNama());
+                edtEmail.setText(mhs.getEmail());
+                if(mhs.getJenisKelamin().equals("Pria")) rdbPria.setChecked(true);
+                else if(mhs.getJenisKelamin().equals("Wanita")) rdbWanita.setChecked(true);
+                int posisi = adapter.getPosition(mhs.getProdi());
+                sprProdi.setSelection(posisi);
+                String[] hobies = mhs.getHobi().split(";");
+                for (String hobi:hobies) {
+                    if(hobi.equals("Belajar")) ckbBelajar.setChecked(true);
+                    else if(hobi.equals("Makan")) ckbMakan.setChecked(true);
+                    else if(hobi.equals("Tidur")) ckbTidur.setChecked(true);
+                }
+            }
+        }
+
     }
     public boolean isValidated(){
         if(edtNama.getText().toString().equals("")){
@@ -107,18 +154,31 @@ public class ProfilActivity extends AppCompatActivity {
                     getNamaFakultas(prodi));
 
             //simpan ke realm
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(r -> {
-                Number maxId = r.where(Mahasiswa.class).max("studentID");
-                int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
-                Mahasiswa mhs = r.createObject(Mahasiswa.class, nextId);
-                mhs.setNama(nama);
-                mhs.setEmail(email);
-                mhs.setProdi(prodi);
-                mhs.setJenisKelamin(jk);
-                mhs.setHobi(hobby);
-            });
-            Toast.makeText(this, "Data tersimpan", Toast.LENGTH_SHORT).show();
+            if(mode.equals("create")) {
+                realm.executeTransaction(r -> {
+                    Number maxId = r.where(Mahasiswa.class).max("studentID");
+                    int nextId = (maxId == null) ? 1 : maxId.intValue() + 1;
+                    Mahasiswa mhs = r.createObject(Mahasiswa.class, nextId);
+                    mhs.setNama(nama);
+                    mhs.setEmail(email);
+                    mhs.setProdi(prodi);
+                    mhs.setJenisKelamin(jk);
+                    mhs.setHobi(hobby);
+                });
+                Toast.makeText(this, "Data tersimpan", Toast.LENGTH_SHORT).show();
+            }
+            else if(mode.equals("edit")){
+                realm.executeTransaction(r-> {
+                    Mahasiswa mhs = r.where(Mahasiswa.class)
+                            .equalTo("studentID",studentID).findFirst();
+                    mhs.setNama(nama);
+                    mhs.setEmail(email);
+                    mhs.setProdi(prodi);
+                    mhs.setJenisKelamin(jk);
+                    mhs.setHobi(hobby);
+                });
+                toListMahasiswa();
+            }
         }
     }
 
@@ -154,5 +214,9 @@ public class ProfilActivity extends AppCompatActivity {
         else{
             return super.onOptionsItemSelected(item);
         }
+    }
+    public void toListMahasiswa(){
+        Intent intent = new Intent(this,ListMahasiswaActivity.class);
+        startActivity(intent);
     }
 }
