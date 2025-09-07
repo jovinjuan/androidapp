@@ -2,8 +2,10 @@ package edu.uph.m23si2.pertamaapp.model;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class KRS extends RealmObject {
+    @PrimaryKey
     private int krsID;
     private Mahasiswa mahasiswa;
     private String semesterAkademik;

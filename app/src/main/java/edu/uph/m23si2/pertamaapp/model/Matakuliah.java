@@ -1,8 +1,11 @@
 package edu.uph.m23si2.pertamaapp.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class Matakuliah extends RealmObject {
+
+    @PrimaryKey
     private int matakuliahID;
     private String Nama;
     private String Prodi;

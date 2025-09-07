@@ -2,9 +2,10 @@ package edu.uph.m23si2.pertamaapp.model;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class KRS_Detail extends RealmObject {
-
+    @PrimaryKey
     private int krs_detailID;
 
     private KRS krs;
